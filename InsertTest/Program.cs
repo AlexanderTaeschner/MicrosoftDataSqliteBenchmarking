@@ -78,7 +78,6 @@
     {
         static void Main(string[] args)
         {
-            SQLitePCL.Batteries_V2.Init();
             var summary = BenchmarkRunner.Run<InsertTest>();
         }
     }
