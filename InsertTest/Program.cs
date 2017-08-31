@@ -5,7 +5,7 @@
 
     public class InsertTest
     {
-        private const int NumberOfInserts = 10000;
+        private const int NumberOfInserts = 1000;
 
         [Benchmark]
         public void InsertSpeed_MDS_Prepared_NoTransaction()
