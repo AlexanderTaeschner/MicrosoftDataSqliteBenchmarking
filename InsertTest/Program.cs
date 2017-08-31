@@ -5,6 +5,8 @@
 
     public class InsertTest
     {
+        private const int NumberOfInserts = 10000;
+
         [Benchmark]
         public void InsertSpeed_MDS_Prepared_NoTransaction()
             => InsertSpeedMicrosoft(true, false);
@@ -49,7 +51,7 @@
                     command.Transaction = txn;
                 }
 
-                for (var i = 0; i < 100000; i++)
+                for (var i = 0; i < NumberOfInserts; i++)
                 {
                     if (prepare)
                     {
@@ -115,7 +117,7 @@
                     command.Transaction = txn;
                 }
 
-                for (var i = 0; i < 100000; i++)
+                for (var i = 0; i < NumberOfInserts; i++)
                 {
                     if (prepare)
                     {
@@ -143,6 +145,7 @@
         static void Main(string[] args)
         {
             var summary = BenchmarkRunner.Run<InsertTest>();
+           // new InsertTest().InsertSpeed_MDS_Prepared_InTransaction();
         }
     }
 }
