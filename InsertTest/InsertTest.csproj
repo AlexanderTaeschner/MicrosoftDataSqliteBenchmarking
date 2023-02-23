@@ -1,11 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net70</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
+		<PackageReference Include="DotNetSQLiteLibrary" Version="1.2.2.1" />
 		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.3" />
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.4" />
 		<PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
