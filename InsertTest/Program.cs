@@ -209,17 +209,24 @@ public class InsertTest
     public void Insert_NotPrepared_InTransaction_DuckDB()
         => InsertDuckDB(false, true);
 
+    [Benchmark]
+    public void Insert_DuckDB_Appender()
+    {
+        (DuckDB.NET.Data.DuckDBConnection connection, DuckDB.NET.Data.DuckDBCommand command) = OpenDuckDBInMemoryConnection();
+
+        using (var appender = connection.CreateAppender("Numbers"))
+        {
+            for (var i = 0; i < NumberOfInserts; i++)
+            {
+                var row = appender.CreateRow();
+                row.AppendValue(i).AppendValue(i).EndRow();
+            }
+        }
+    }
+
     public static void InsertDuckDB(bool prepare, bool useTransaction)
     {
-        var connectionString = "Data Source=:memory:";
-
-        using var connection = new DuckDB.NET.Data.DuckDBConnection(connectionString);
-        connection.Open();
-        var command = connection.CreateCommand();
-        command.CommandText = "DROP TABLE IF EXISTS Numbers";
-        command.ExecuteNonQuery();
-        command.CommandText = "CREATE TABLE Numbers (Key INTEGER, Value REAL, PRIMARY KEY(Key));";
-        command.ExecuteNonQuery();
+        (DuckDB.NET.Data.DuckDBConnection connection, DuckDB.NET.Data.DuckDBCommand command) = OpenDuckDBInMemoryConnection();
 
         if (prepare)
         {
@@ -255,6 +262,19 @@ public class InsertTest
         {
             txn.Commit();
         }
+    }
+
+    private static (DuckDB.NET.Data.DuckDBConnection connection, DuckDB.NET.Data.DuckDBCommand command) OpenDuckDBInMemoryConnection()
+    {
+        var connectionString = "Data Source=:memory:";
+        DuckDB.NET.Data.DuckDBConnection connection = new DuckDB.NET.Data.DuckDBConnection(connectionString);
+        connection.Open();
+        DuckDB.NET.Data.DuckDBCommand command = connection.CreateCommand();
+        command.CommandText = "DROP TABLE IF EXISTS Numbers";
+        command.ExecuteNonQuery();
+        command.CommandText = "CREATE TABLE Numbers (Key INTEGER, Value REAL, PRIMARY KEY(Key));";
+        command.ExecuteNonQuery();
+        return (connection, command);
     }
 }
 
